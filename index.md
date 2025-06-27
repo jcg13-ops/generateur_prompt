@@ -1,3 +1,12 @@
+---
+layout: default
+title: Ma super appli
+---
+
+# Bienvenue sur mon site
+
+Voici mon contenu d’application.
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
