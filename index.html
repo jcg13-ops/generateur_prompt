@@ -455,7 +455,7 @@
                 </div>
 
                 <div class="preview-box" id="promptPreview">
-                    Aperçu du prompt
+                    👁️ Aperçu du prompt
                 </div>
 
                 <div class="action-buttons">
@@ -684,7 +684,7 @@
 
             copyPrompt() {
                 const prompt = this.preview.textContent;
-                if (prompt && prompt !== 'Remplissez les champs pour voir l\'aperçu du prompt généré...') {
+                if (prompt && prompt !== 'Aperçu du prompt') {
                     navigator.clipboard.writeText(prompt).then(() => {
                         this.showToast('Prompt copié dans le presse-papier!');
                     }).catch(() => {
