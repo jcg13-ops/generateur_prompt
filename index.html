@@ -403,13 +403,13 @@
                         <label for="format">📊 Format de Sortie</label>
                         <select id="format">
                             <option value="">Choisir un format...</option>
-                            <option value="liste">Liste à puces</option>
-                            <option value="paragraphes">Paragraphes</option>
-                            <option value="tableau">Tableau</option>
-                            <option value="plan">Plan structuré</option>
-                            <option value="json">Format JSON</option>
-                            <option value="markdown">Markdown</option>
-                            <option value="markdown">Avec illustrations</option>
+                            <option value="de liste">Liste à puces</option>
+                            <option value="de paragraphes">Paragraphes</option>
+                            <option value="de tableau">Tableau</option>
+                            <option value="de plan">Plan structuré</option>
+                            <option value="de json">Format JSON</option>
+                            <option value="de markdown">Markdown</option>
+                            <option value="d'illustrations">Illustrations</option>
                         </select>
                     </div>
 
@@ -650,7 +650,7 @@
                         prompt += `- Adopte un ton ${data.tone}\n`;
                     }
                     if (data.format) {
-                        prompt += `- Présente la réponse sous forme de ${data.format}\n`;
+                        prompt += `- Présente la réponse sous forme ${data.format}\n`;
                     }
                     prompt += '\n';
                 }
