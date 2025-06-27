@@ -2,6 +2,9 @@
 layout: default
 title: Ma super appli
 ---
+git add _config.yml index.md
+git commit -m "Ajout thème Merlot avec Jekyll"
+git push origin main
 
 # Bienvenue sur mon site
 
