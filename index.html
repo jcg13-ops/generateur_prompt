@@ -156,6 +156,122 @@
     }
   </style>
 </head>
+  <script>
+  function escapeHtml(text) {
+    const map = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#039;',
+    };
+    return text.replace(/[&<>"']/g, (m) => map[m]);
+  }
+
+  function generatePrompt() {
+    const role = document.getElementById('role').value.trim();
+    const context = document.getElementById('context').value.trim();
+    const task = document.getElementById('task').value.trim();
+    const constraints = document.getElementById('constraints').value.trim();
+    const tone = document.getElementById('tone').value;
+    const format = document.getElementById('format').value;
+
+    let promptHTML = '';
+
+    if (role)
+      promptHTML += `<div><strong>Tu es</strong> ${escapeHtml(role)}.</div><br/>`;
+
+    if (context)
+      promptHTML += `<div class="section-title">Contexte</div><div>${escapeHtml(context)}</div><br/>`;
+
+    if (task)
+      promptHTML += `<div class="section-title">Tâche principale</div><div>${escapeHtml(task)}</div><br/>`;
+
+    if (constraints)
+      promptHTML += `<div class="section-title">Contraintes et limitations</div><div>${escapeHtml(constraints)}</div><br/>`;
+
+    if (tone || format) {
+      promptHTML += `<div class="section-title">Instructions</div><div>`;
+      if (tone) promptHTML += `- Adopte un ton ${escapeHtml(tone)}<br/>`;
+      if (format) promptHTML += `- Format souhaité : ${escapeHtml(format)}<br/>`;
+      promptHTML += `</div>`;
+    }
+
+    const preview = document.getElementById('promptPreview');
+    preview.innerHTML = promptHTML || 'Aperçu du prompt';
+
+    const plainText = `${role ? `Tu es ${role}.\n\n` : ''}${context ? `Contexte\n${context}\n\n` : ''}${task ? `Tâche principale\n${task}\n\n` : ''}${constraints ? `Contraintes et limitations\n${constraints}\n\n` : ''}${tone || format ? `Instructions\n` : ''}${tone ? `- Adopte un ton ${tone}\n` : ''}${format ? `- Format souhaité : ${format}\n` : ''}`;
+  }
+
+  function copyPrompt() {
+    const text = document.getElementById('promptPreview').textContent;
+    navigator.clipboard.writeText(text).then(() => alert('Prompt copié !'));
+  }
+
+  function clearForm() {
+    if (confirm('Effacer tous les champs ?')) {
+      document.getElementById('promptForm').reset();
+      generatePrompt();
+    }
+  }
+
+  function savePrompt() {
+    const preview = document.getElementById('promptPreview');
+    if (!preview.textContent || preview.textContent === 'Aperçu du prompt') {
+      alert('Aucun prompt à sauvegarder');
+      return;
+    }
+    const prompts = JSON.parse(localStorage.getItem('savedPrompts') || '[]');
+    const title = preview.textContent.split('\n')[0] || `Prompt ${prompts.length + 1}`;
+    prompts.push({
+      text: preview.textContent,
+      title: title,
+      date: new Date().toLocaleString(),
+    });
+    localStorage.setItem('savedPrompts', JSON.stringify(prompts));
+    renderSavedPrompts();
+    alert('Prompt sauvegardé');
+  }
+
+  function renderSavedPrompts() {
+    const list = document.getElementById('savedPromptsList');
+    const prompts = JSON.parse(localStorage.getItem('savedPrompts') || '[]');
+    if (prompts.length === 0) {
+      list.innerHTML = '';
+      return;
+    }
+    list.innerHTML = '<h4>Prompts sauvegardés</h4>' + prompts
+      .map((p, i) =>
+        `<div class="saved-prompt-item">
+          <span onclick="loadPrompt(${i})">${p.title}</span>
+          <span class="delete-btn" onclick="deletePrompt(event, ${i})" title="Supprimer">🗑️</span>
+        </div>`
+      ).join('');
+  }
+
+  function loadPrompt(index) {
+    const prompts = JSON.parse(localStorage.getItem('savedPrompts') || '[]');
+    if (prompts[index]) {
+      document.getElementById('promptPreview').textContent = prompts[index].text;
+    }
+  }
+
+  function deletePrompt(event, index) {
+    event.stopPropagation();
+    if (confirm('Supprimer ce prompt ?')) {
+      const prompts = JSON.parse(localStorage.getItem('savedPrompts') || '[]');
+      prompts.splice(index, 1);
+      localStorage.setItem('savedPrompts', JSON.stringify(prompts));
+      renderSavedPrompts();
+    }
+  }
+
+  document.getElementById('promptForm').addEventListener('input', generatePrompt);
+  window.addEventListener('load', () => {
+    generatePrompt();
+    renderSavedPrompts();
+  });
+</script>
 <body>
   <div class="container">
     <div class="header">
