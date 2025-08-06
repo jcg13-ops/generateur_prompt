@@ -171,15 +171,15 @@
 </div>
 <div class="form-group">
 <label for="context">🌟 Contexte</label>
-<textarea id="context" placeholder="Décrire le contexte et la raison de ce prompt" rows="6"></textarea>
+<textarea id="context" placeholder="Décrire le contexte de votre demande : " rows="6"></textarea>
 </div>
 <div class="form-group">
 <label for="task">📝 Tâche principale</label>
-<textarea id="task" placeholder="Décrire ce qui l'IA doit accomplir : Rédige, créé, analyse..." rows="6"></textarea>
+<textarea id="task" placeholder="Décrire ce qui l'IA doit accomplir : Rédige, créé, analyse, synthétise, reformule..." rows="6"></textarea>
 </div>
 <div class="form-group">
 <label for="constraints">⚠️ Contraintes et limitations</label>
-<textarea id="constraints" placeholder="Exemple : Utilise un langage compréhensible pour un public non technique." rows="6"></textarea>
+<textarea id="constraints" placeholder="Exemple : Réponse succinte, propose des liens sources, limite le language technique..." rows="6"></textarea>
 </div>
 <div class="form-group">
 <label for="tone">🎨 Ton et style</label>
@@ -187,7 +187,7 @@
 </div>
 <div class="form-group">
 <label for="format">📁 Format de sortie</label>
-<select id="format"><option value="">-- Choisir --</option><option value="liste">Liste</option><option value="paragraphe">Paragraphe</option><option value="tableau">Tableau</option><option value="plan">Plan structuré</option><option value="image">Image</option><option value="video">Vidéo</option><option value="audio">Fichier audio</option><option value="word">Word</option><option value="excel">Excel</option><option value="powerpoint">PowerPoint</option></select>
+<select id="format"><option value="">-- Choisir --</option><option value="liste">Liste</option><option value="tableau">Tableau</option><option value="plan">Plan structuré</option><option value="Fichier image">Fichier image</option><option value="Fichier video">Fichier Vidéo</option><option value="Audio">Fichier audio</option><option value="Word">Fichier Word</option><option value="excel">Excel</option><option value="powerpoint">PowerPoint</option></select>
 </div>
 </form>
 </div>
@@ -243,7 +243,7 @@
       if (tone || format) {
         promptHTML += `<div><div class="section-title">Instructions</div>`;
         if (tone) promptHTML += `- Adopte un ton ${escapeHtml(tone)}<br/>`;
-        if (format) promptHTML += `- Format souhaité : ${escapeHtml(format)}<br/>`;
+        if (format) promptHTML += `- Format de sortie souhaité : ${escapeHtml(format)}<br/>`;
         promptHTML += `</div>`;
       }
 
