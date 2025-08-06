@@ -1,10 +1,11 @@
 <!DOCTYPE html>
+
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PromptMaster</title>
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>PromptMaster</title>
+<style>
     body {
       font-family: 'Segoe UI', sans-serif;
       background: linear-gradient(135deg, #f6f6f6 0%, #f6f6f6 100%);
@@ -149,76 +150,61 @@
       background: #01a6aa;
     }
     .btn-clear {
-      background: #d7c378;
+      background: #e3051b;
     }
     .btn-save {
-      background: #d7c378;
+      background: #f6a318;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <h1>Prompt optimisé</h1>
-    </div>
-    <div class="main-content">
-      <div class="form-section">
-        <form id="promptForm">
-          <div class="form-group">
-            <label for="role">👤 Rôle de l'IA</label>
-            <input type="text" id="role" placeholder="Exemple : sois expert en cybersécurité" />
-          </div>
-          <div class="form-group">
-            <label for="context">🌟 Contexte</label>
-            <textarea id="context" placeholder="Exemple : rédige un rapport sur les vulnérabilités d’un réseau d’entreprise."></textarea>
-          </div>
-          <div class="form-group">
-            <label for="task">📝 Tâche principale</label>
-            <textarea id="task" placeholder="Exemple : identifie les principales menaces et propose des solutions."></textarea>
-          </div>
-          <div class="form-group">
-            <label for="constraints">⚠️ Contraintes et limitations</label>
-            <textarea id="constraints" placeholder="Exemple : utilise un langage compréhensible pour un public non technique."></textarea>
-          </div>
-          <div class="form-group">
-            <label for="tone">🎨 Ton et style</label>
-            <select id="tone">
-              <option value="">-- Choisir --</option>
-              <option value="professionnel">Professionnel</option>
-              <option value="amical">Amical</option>
-              <option value="formel">Formel</option>
-              <option value="decontracte">Décontracté</option>
-              <option value="creatif">Créatif</option>
-              <option value="technique">Technique</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="format">📁 Format de sortie</label>
-            <select id="format">
-              <option value="">-- Choisir --</option>
-              <option value="liste">Liste</option>
-              <option value="paragraphe">Paragraphe</option>
-              <option value="tableau">Tableau</option>
-              <option value="plan">Plan structuré</option>
-            </select>
-          </div>
-        </form>
-      </div>
-      <div class="preview-section">
-        <h3>👁️ Aperçu du Prompt</h3>
-        <div class="preview-box" id="promptPreview">Aperçu du prompt</div>
-        <div class="metrics" id="promptStats"></div>
-        <div class="action-buttons">
-          <button class="btn btn-primary" onclick="copyPrompt()">📋 Copier</button>
-          <button class="btn btn-clear" onclick="clearForm()">🗑️ Effacer</button>
-          <button class="btn btn-save" onclick="savePrompt()">💾 Sauvegarder</button>
-        </div>
-        <div class="saved-prompts" id="savedPromptsList"></div>
-      </div>
-    </div>
-  </div>
-
-  <script>
+<div class="container">
+<div class="header">
+<h1>PromptMaster</h1>
+</div>
+<div class="main-content">
+<div class="form-section">
+<form id="promptForm">
+<div class="form-group">
+<label for="role">👤 Rôle de l'IA</label>
+<input id="role" placeholder="Exemple : tu es expert en cybersécurité" type="text"/>
+</div>
+<div class="form-group">
+<label for="context">🌟 Contexte</label>
+<textarea id="context" placeholder="Exemple : tu rédiges un rapport sur les vulnérabilités d’un réseau d’entreprise." rows="12"></textarea>
+</div>
+<div class="form-group">
+<label for="task">📝 Tâche principale</label>
+<textarea id="task" placeholder="Exemple : tu identifies les principales menaces et proposes des solutions." rows="12"></textarea>
+</div>
+<div class="form-group">
+<label for="constraints">⚠️ Contraintes et limitations</label>
+<textarea id="constraints" placeholder="Exemple : tu utilises un langage compréhensible pour un public non technique." rows="12"></textarea>
+</div>
+<div class="form-group">
+<label for="tone">🎨 Ton et style</label>
+<select id="tone"><option value="">-- Choisir --</option><option value="affectueux">Affectueux</option><option value="amical">Amical</option><option value="creatif">Créatif</option><option value="decontracte">Décontracté</option><option value="désagréable">Désagréable</option><option value="formel">Formel</option><option value="humoristique">Humoristique</option><option value="professionnel">Professionnel</option><option value="technique">Technique</option></select>
+</div>
+<div class="form-group">
+<label for="format">📁 Format de sortie</label>
+<select id="format"><option value="">-- Choisir --</option><option value="liste">Liste</option><option value="paragraphe">Paragraphe</option><option value="tableau">Tableau</option><option value="plan">Plan structuré</option><option value="image">Image</option><option value="video">Vidéo</option><option value="audio">Fichier audio</option><option value="word">Word</option><option value="excel">Excel</option><option value="powerpoint">PowerPoint</option></select>
+</div>
+</form>
+</div>
+<div class="preview-section">
+<h3>👁️ Aperçu du Prompt</h3>
+<div class="preview-box" id="promptPreview">Aperçu du prompt</div>
+<div class="metrics" id="promptStats"></div>
+<div class="action-buttons">
+<button class="btn btn-primary" onclick="copyPrompt()">📋 Copier</button>
+<button class="btn btn-clear" onclick="clearForm()">🗑️ Effacer</button>
+<button class="btn btn-save" onclick="savePrompt()">💾 Sauvegarder</button>
+</div>
+<div class="saved-prompts" id="savedPromptsList"></div>
+</div>
+</div>
+</div>
+<script>
     function escapeHtml(text) {
       const map = {
         '&': '&amp;',
