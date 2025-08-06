@@ -256,7 +256,7 @@
       const words = plainText.trim().split(/\s+/).filter(Boolean).length;
       const chars = plainText.length;
       const percent = Math.min(Math.round((chars / 4000) * 100), 100);
-      stats.textContent = `📝 ${words} mots · ${chars} caractères · ${percent}% qualité`;
+      stats.textContent = `📝 ${words} mots · ${chars} caractères `;
     }
 
     function copyPrompt() {
