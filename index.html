@@ -72,9 +72,15 @@
       flex-grow: 1;
       white-space: pre-wrap;
       font-family: monospace;
+      min-height: 200px;
     }
     .preview-box b {
       text-transform: lowercase;
+    }
+    .metrics {
+      margin-top: 10px;
+      font-size: 0.9em;
+      color: #666;
     }
     .action-buttons {
       margin-top: 20px;
@@ -111,19 +117,19 @@
         <form id="promptForm">
           <div class="form-group">
             <label for="role">👤 Rôle</label>
-            <input type="text" id="role">
+            <input type="text" id="role" placeholder="Par exemple : expert en cybersécurité">
           </div>
           <div class="form-group">
             <label for="context">🌟 Contexte</label>
-            <textarea id="context"></textarea>
+            <textarea id="context" placeholder="Par exemple : tu rédiges un rapport sur les vulnérabilités d’un réseau d’entreprise."></textarea>
           </div>
           <div class="form-group">
             <label for="task">📝 Tâche principale</label>
-            <textarea id="task"></textarea>
+            <textarea id="task" placeholder="Par exemple : identifier les principales menaces et proposer des solutions."></textarea>
           </div>
           <div class="form-group">
             <label for="constraints">⚠️ Contraintes et limitations</label>
-            <textarea id="constraints"></textarea>
+            <textarea id="constraints" placeholder="Par exemple : utiliser un langage compréhensible pour un public non technique."></textarea>
           </div>
           <div class="form-group">
             <label for="tone">🎨 Ton et style</label>
@@ -152,6 +158,7 @@
       <div class="preview-section">
         <h3>👁️ Aperçu du Prompt</h3>
         <div class="preview-box" id="promptPreview">Aperçu du prompt</div>
+        <div class="metrics" id="promptStats"></div>
         <div class="action-buttons">
           <button class="btn btn-primary" onclick="copyPrompt()">📋 Copier</button>
           <button class="btn btn-secondary" onclick="clearForm()">🗑️ Effacer</button>
@@ -171,17 +178,41 @@
       const format = document.getElementById('format').value;
 
       let prompt = '';
-      if (role) prompt += `Tu es ${role}.\n\n`;
-      if (context) prompt += `Contexte\n${context}\n\n`;
-      if (task) prompt += `Tâche principale\n${task}\n\n`;
-      if (constraints) prompt += `Contraintes et limitations\n${constraints}\n\n`;
+      if (role) prompt += `Tu es ${role}.
+
+`;
+      if (context) prompt += `Contexte
+${context}
+
+`;
+      if (task) prompt += `Tâche principale
+${task}
+
+`;
+      if (constraints) prompt += `Contraintes et limitations
+${constraints}
+
+`;
       if (tone || format) {
-        prompt += `Instructions\n`;
-        if (tone) prompt += `- Adopter un ton ${tone}\n`;
-        if (format) prompt += `- Format souhaité : ${format}\n`;
+        prompt += `Instructions
+`;
+        if (tone) prompt += `- Adopter un ton ${tone}
+`;
+        if (format) prompt += `- Format souhaité : ${format}
+`;
       }
 
-      document.getElementById('promptPreview').textContent = prompt.trim() || 'Aperçu du prompt';
+      const preview = document.getElementById('promptPreview');
+      const stats = document.getElementById('promptStats');
+
+      const finalText = prompt.trim();
+      preview.textContent = finalText || 'Aperçu du prompt';
+
+      const words = finalText.split(/\s+/).filter(Boolean).length;
+      const chars = finalText.length;
+      const percent = Math.min(Math.round((chars / 4000) * 100), 100);
+
+      stats.textContent = `📝 ${words} mots · ${chars} caractères · ${percent}% de la limite`;
     }
 
     function copyPrompt() {
