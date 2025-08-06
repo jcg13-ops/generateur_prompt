@@ -65,9 +65,14 @@
       border-radius: 10px;
       border: 2px solid #e0e0e0;
       font-size: 1em;
-      font-weight: normal;
       font-family: 'Segoe UI', sans-serif;
+      box-sizing: border-box;
     }
+
+    textarea {
+      resize: vertical; /* Agrandissable uniquement en hauteur */
+    }
+
     .preview-section h3 {
       margin-top: 0;
       font-size: 1.1em;
@@ -124,9 +129,10 @@
       font-size: 1em;
       cursor: pointer;
       margin-left: 10px;
+      text-decoration: none;
     }
     .delete-btn:hover {
-      text-decoration: underline;
+      text-decoration: none;
     }
     .action-buttons {
       margin-top: 20px;
