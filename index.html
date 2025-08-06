@@ -4,367 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Générateur de Prompts Optimisés</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            font-weight: 300;
-        }
-
-        .header p {
-            font-size: 1.2em;
-            opacity: 0.9;
-        }
-
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0;
-            min-height: 600px;
-        }
-
-        .form-section {
-            padding: 30px;
-            background: #f8f9fa;
-        }
-
-        .preview-section {
-            padding: 30px;
-            background: white;
-            border-left: 1px solid #e0e0e0;
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-        }
-
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #333;
-            font-size: 1.1em;
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #4CAF50;
-            box-shadow: 0 0 10px rgba(76, 175, 80, 0.2);
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        .suggestions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 8px;
-        }
-
-        .suggestion-tag {
-            background: #e3f2fd;
-            color: #1976d2;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .suggestion-tag:hover {
-            background: #1976d2;
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        .templates {
-            margin-bottom: 30px;
-        }
-
-        .template-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .template-card {
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            border: 2px solid #e0e0e0;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .template-card:hover {
-            border-color: #4CAF50;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .template-card h4 {
-            color: #4CAF50;
-            margin-bottom: 8px;
-        }
-
-        .template-card p {
-            font-size: 0.9em;
-            color: #666;
-        }
-
-        .preview-box {
-            background: #f5f5f5;
-            border: 2px dashed #ccc;
-            border-radius: 10px;
-            padding: 20px;
-            min-height: 300px;
-            margin-bottom: 20px;
-            font-family: 'Courier New', monospace;
-            white-space: pre-wrap;
-            line-height: 1.6;
-        }
-
-        .preview-stats {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            padding: 15px;
-            background: #e8f5e8;
-            border-radius: 10px;
-        }
-
-        .stat {
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #4CAF50;
-        }
-
-        .stat-label {
-            font-size: 0.9em;
-            color: #666;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
-        }
-
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background: #5a6268;
-            transform: translateY(-2px);
-        }
-
-        .tips {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
-        }
-
-        .tips h3 {
-            color: #856404;
-            margin-bottom: 15px;
-        }
-
-        .tips ul {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .tips li {
-            margin-bottom: 8px;
-            padding-left: 20px;
-            position: relative;
-        }
-
-        .tips li:before {
-            content: "💡";
-            position: absolute;
-            left: 0;
-        }
-
-        .saved-prompts {
-            margin-top: 20px;
-        }
-
-        .saved-prompt-item {
-            background: white;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .saved-prompt-item:hover {
-            border-color: #4CAF50;
-        }
-
-        .toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #4CAF50;
-            color: white;
-            padding: 15px 20px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            z-index: 1000;
-            transform: translateX(400px);
-            transition: transform 0.3s ease;
-        }
-
-        .toast.show {
-            transform: translateX(0);
-        }
-
-        @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .preview-section {
-                border-left: none;
-                border-top: 1px solid #e0e0e0;
-            }
-            
-            .header h1 {
-                font-size: 2em;
-            }
-            
-            .template-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🚀 Générateur de Prompts Optimisés</h1>
-            <p>Créez des prompts efficaces et structurés pour vos IA génératives</p>
+            <h1>🚀 Générateur de prompts optimisés</h1>
         </div>
 
         <div class="main-content">
             <div class="form-section">
-                <div class="templates">
-                    <h3>📋 Templates Prédéfinis</h3>
-                    <div class="template-grid">
-                        <div class="template-card" data-template="marketing">
-                            <h4>Marketing</h4>
-                            <p>Création de contenu publicitaire</p>
-                        </div>
-                        <div class="template-card" data-template="education">
-                            <h4>Éducation</h4>
-                            <p>Contenu pédagogique</p>
-                        </div>
-                        <div class="template-card" data-template="technique">
-                            <h4>Technique</h4>
-                            <p>Documentation et guides</p>
-                        </div>
-                        <div class="template-card" data-template="creatif">
-                            <h4>Créatif</h4>
-                            <p>Storytelling et création</p>
-                        </div>
-                    </div>
-                </div>
-
                 <form id="promptForm">
                     <div class="form-group">
-                        <label for="context">🎯 Contexte et Situation</label>
-                        <textarea id="context" placeholder="Décrivez le contexte, la situation ou l'environnement..."></textarea>
-                        <div class="suggestions">
-                            <span class="suggestion-tag" data-field="context">Projet professionnel</span>
-                            <span class="suggestion-tag" data-field="context">Usage personnel</span>
-                            <span class="suggestion-tag" data-field="context">Contexte éducatif</span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="role">👤 Rôle/Persona de l'IA</label>
+                        <label for="role">👤 Rôle de l'IA</label>
                         <input type="text" id="role" placeholder="Ex: Expert en marketing digital, Professeur de français...">
                         <div class="suggestions">
                             <span class="suggestion-tag" data-field="role">Expert marketing</span>
@@ -375,7 +27,17 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="task">📝 Tâche Principale</label>
+                        <label for="context">🎯 Contexte et situation</label>
+                        <textarea id="context" placeholder="Décrivez le contexte, la situation ou l'environnement..."></textarea>
+                        <div class="suggestions">
+                            <span class="suggestion-tag" data-field="context">Projet professionnel</span>
+                            <span class="suggestion-tag" data-field="context">Usage personnel</span>
+                            <span class="suggestion-tag" data-field="context">Contexte éducatif</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="task">📝 Tâche principale</label>
                         <textarea id="task" placeholder="Décrivez précisément ce que vous voulez que l'IA accomplisse..."></textarea>
                         <div class="suggestions">
                             <span class="suggestion-tag" data-field="task">Rédiger</span>
@@ -386,7 +48,17 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="tone">🎨 Ton et Style</label>
+                        <label for="constraints">⚠️ Contraintes et limitations</label>
+                        <textarea id="constraints" placeholder="Limitations de longueur, restrictions, éléments à éviter..."></textarea>
+                        <div class="suggestions">
+                            <span class="suggestion-tag" data-field="constraints">Max 500 mots</span>
+                            <span class="suggestion-tag" data-field="constraints">Éviter jargon</span>
+                            <span class="suggestion-tag" data-field="constraints">Niveau débutant</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tone">🎨 Ton et style</label>
                         <select id="tone">
                             <option value="">Choisir un ton...</option>
                             <option value="professionnel">Professionnel</option>
@@ -399,7 +71,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="format">📊 Format de Sortie</label>
+                        <label for="format">📊 Format de sortie</label>
                         <select id="format">
                             <option value="">Choisir un format...</option>
                             <option value="liste">Liste à puces</option>
@@ -410,25 +82,10 @@
                             <option value="markdown">Markdown</option>
                         </select>
                     </div>
-
-                    <div class="form-group">
-                        <label for="constraints">⚠️ Contraintes et Limitations</label>
-                        <textarea id="constraints" placeholder="Limitations de longueur, restrictions, éléments à éviter..."></textarea>
-                        <div class="suggestions">
-                            <span class="suggestion-tag" data-field="constraints">Max 500 mots</span>
-                            <span class="suggestion-tag" data-field="constraints">Éviter jargon</span>
-                            <span class="suggestion-tag" data-field="constraints">Niveau débutant</span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="examples">💡 Exemples (Optionnel)</label>
-                        <textarea id="examples" placeholder="Fournissez des exemples de ce que vous attendez..."></textarea>
-                    </div>
                 </form>
 
                 <div class="saved-prompts">
-                    <h3>💾 Prompts Sauvegardés</h3>
+                    <h3>💾 Prompts sauvegardés</h3>
                     <div id="savedPromptsList">
                         <p style="color: #666; font-style: italic;">Aucun prompt sauvegardé</p>
                     </div>
@@ -436,7 +93,7 @@
             </div>
 
             <div class="preview-section">
-                <h3>👁️ Aperçu du Prompt</h3>
+                <h3>👁️ Aperçu du prompt</h3>
                 
                 <div class="preview-stats">
                     <div class="stat">
@@ -459,7 +116,7 @@
 
                 <div class="action-buttons">
                     <button class="btn btn-primary" id="copyBtn">
-                        📋 Copier le Prompt
+                        📋 Copier
                     </button>
                     <button class="btn btn-secondary" id="saveBtn">
                         💾 Sauvegarder
@@ -467,17 +124,6 @@
                     <button class="btn btn-secondary" id="clearBtn">
                         🗑️ Effacer
                     </button>
-                </div>
-
-                <div class="tips">
-                    <h3>💡 Conseils pour un prompt efficace</h3>
-                    <ul>
-                        <li>Soyez spécifique dans vos instructions</li>
-                        <li>Définissez clairement le contexte</li>
-                        <li>Précisez le format de sortie désiré</li>
-                        <li>Ajoutez des exemples si nécessaire</li>
-                        <li>Testez et ajustez votre prompt</li>
-                    </ul>
                 </div>
             </div>
         </div>
@@ -487,307 +133,6 @@
         <span id="toastMessage"></span>
     </div>
 
-    <script>
-        class PromptGenerator {
-            constructor() {
-                this.initializeElements();
-                this.bindEvents();
-                this.loadSavedPrompts();
-                this.setupTemplates();
-            }
-
-            initializeElements() {
-                this.form = document.getElementById('promptForm');
-                this.preview = document.getElementById('promptPreview');
-                this.charCount = document.getElementById('charCount');
-                this.wordCount = document.getElementById('wordCount');
-                this.qualityScore = document.getElementById('qualityScore');
-                this.copyBtn = document.getElementById('copyBtn');
-                this.saveBtn = document.getElementById('saveBtn');
-                this.clearBtn = document.getElementById('clearBtn');
-                this.toast = document.getElementById('toast');
-                this.toastMessage = document.getElementById('toastMessage');
-            }
-
-            bindEvents() {
-                // Mise à jour en temps réel
-                this.form.addEventListener('input', () => this.updatePreview());
-                this.form.addEventListener('change', () => this.updatePreview());
-
-                // Boutons d'action
-                this.copyBtn.addEventListener('click', () => this.copyPrompt());
-                this.saveBtn.addEventListener('click', () => this.savePrompt());
-                this.clearBtn.addEventListener('click', () => this.clearForm());
-
-                // Suggestions cliquables
-                document.querySelectorAll('.suggestion-tag').forEach(tag => {
-                    tag.addEventListener('click', (e) => this.applySuggestion(e));
-                });
-            }
-
-            setupTemplates() {
-                const templates = {
-                    marketing: {
-                        context: "Campagne marketing pour une entreprise B2B dans le secteur technologique",
-                        role: "Expert en marketing digital avec 10 ans d'expérience",
-                        task: "Créer une stratégie de contenu pour LinkedIn qui génère des leads qualifiés",
-                        tone: "professionnel",
-                        format: "plan",
-                        constraints: "Budget limité, audience de dirigeants d'entreprise"
-                    },
-                    education: {
-                        context: "Cours en ligne pour étudiants de niveau universitaire",
-                        role: "Professeur spécialisé en pédagogie numérique",
-                        task: "Développer un module d'apprentissage interactif",
-                        tone: "amical",
-                        format: "liste",
-                        constraints: "Accessible aux débutants, 30 minutes maximum"
-                    },
-                    technique: {
-                        context: "Documentation technique pour développeurs",
-                        role: "Architecte logiciel senior",
-                        task: "Rédiger un guide d'implémentation détaillé",
-                        tone: "technique",
-                        format: "markdown",
-                        constraints: "Précis, avec exemples de code"
-                    },
-                    creatif: {
-                        context: "Projet créatif pour une marque lifestyle",
-                        role: "Directeur artistique créatif",
-                        task: "Concevoir une campagne narrative engageante",
-                        tone: "creatif",
-                        format: "paragraphes",
-                        constraints: "Ton inspirant, storytelling fort"
-                    }
-                };
-
-                document.querySelectorAll('.template-card').forEach(card => {
-                    card.addEventListener('click', () => {
-                        const templateName = card.dataset.template;
-                        const template = templates[templateName];
-                        if (template) {
-                            this.applyTemplate(template);
-                        }
-                    });
-                });
-            }
-
-            applyTemplate(template) {
-                Object.keys(template).forEach(key => {
-                    const element = document.getElementById(key);
-                    if (element) {
-                        element.value = template[key];
-                    }
-                });
-                this.updatePreview();
-                this.showToast('Template appliqué avec succès!');
-            }
-
-            applySuggestion(e) {
-                const tag = e.target;
-                const fieldName = tag.dataset.field;
-                const value = tag.textContent;
-                const field = document.getElementById(fieldName);
-                
-                if (field) {
-                    if (field.value) {
-                        field.value += field.tagName === 'TEXTAREA' ? '\n' + value : ', ' + value;
-                    } else {
-                        field.value = value;
-                    }
-                    this.updatePreview();
-                }
-            }
-
-            updatePreview() {
-                const formData = this.getFormData();
-                const prompt = this.generatePrompt(formData);
-                
-                this.preview.textContent = prompt || 'Remplissez les champs pour voir l\'aperçu du prompt généré...';
-                
-                // Mise à jour des statistiques
-                const charCount = prompt.length;
-                const wordCount = prompt.split(/\s+/).filter(word => word.length > 0).length;
-                const qualityScore = this.calculateQualityScore(formData);
-                
-                this.charCount.textContent = charCount;
-                this.wordCount.textContent = wordCount;
-                this.qualityScore.textContent = qualityScore + '%';
-            }
-
-            getFormData() {
-                return {
-                    context: document.getElementById('context').value,
-                    role: document.getElementById('role').value,
-                    task: document.getElementById('task').value,
-                    tone: document.getElementById('tone').value,
-                    format: document.getElementById('format').value,
-                    constraints: document.getElementById('constraints').value,
-                    examples: document.getElementById('examples').value
-                };
-            }
-
-            generatePrompt(data) {
-                let prompt = '';
-                
-                if (data.role) {
-                    prompt += `Tu es ${data.role}.\n\n`;
-                }
-                
-                if (data.context) {
-                    prompt += `CONTEXTE:\n${data.context}\n\n`;
-                }
-                
-                if (data.task) {
-                    prompt += `TÂCHE:\n${data.task}\n\n`;
-                }
-                
-                if (data.tone || data.format) {
-                    prompt += `INSTRUCTIONS:\n`;
-                    if (data.tone) {
-                        prompt += `- Adopte un ton ${data.tone}\n`;
-                    }
-                    if (data.format) {
-                        prompt += `- Présente la réponse sous forme de ${data.format}\n`;
-                    }
-                    prompt += '\n';
-                }
-                
-                if (data.constraints) {
-                    prompt += `CONTRAINTES:\n${data.constraints}\n\n`;
-                }
-                
-                if (data.examples) {
-                    prompt += `EXEMPLES:\n${data.examples}\n\n`;
-                }
-                
-                return prompt.trim();
-            }
-
-            calculateQualityScore(data) {
-                let score = 0;
-                const fields = ['context', 'role', 'task', 'tone', 'format'];
-                
-                fields.forEach(field => {
-                    if (data[field] && data[field].trim()) {
-                        score += 20;
-                    }
-                });
-                
-                // Bonus pour les contraintes et exemples
-                if (data.constraints && data.constraints.trim()) score += 5;
-                if (data.examples && data.examples.trim()) score += 5;
-                
-                return Math.min(100, score);
-            }
-
-            copyPrompt() {
-                const prompt = this.preview.textContent;
-                if (prompt && prompt !== 'Remplissez les champs pour voir l\'aperçu du prompt généré...') {
-                    navigator.clipboard.writeText(prompt).then(() => {
-                        this.showToast('Prompt copié dans le presse-papier!');
-                    }).catch(() => {
-                        this.showToast('Erreur lors de la copie', 'error');
-                    });
-                } else {
-                    this.showToast('Aucun prompt à copier', 'warning');
-                }
-            }
-
-            savePrompt() {
-                const formData = this.getFormData();
-                const prompt = this.generatePrompt(formData);
-                
-                if (!prompt) {
-                    this.showToast('Aucun prompt à sauvegarder', 'warning');
-                    return;
-                }
-
-                const savedPrompts = JSON.parse(localStorage.getItem('savedPrompts') || '[]');
-                const newPrompt = {
-                    id: Date.now(),
-                    name: formData.task ? formData.task.substring(0, 50) + '...' : 'Prompt sans nom',
-                    prompt: prompt,
-                    createdAt: new Date().toLocaleDateString()
-                };
-
-                savedPrompts.push(newPrompt);
-                localStorage.setItem('savedPrompts', JSON.stringify(savedPrompts));
-                
-                this.loadSavedPrompts();
-                this.showToast('Prompt sauvegardé avec succès!');
-            }
-
-            loadSavedPrompts() {
-                const savedPrompts = JSON.parse(localStorage.getItem('savedPrompts') || '[]');
-                const container = document.getElementById('savedPromptsList');
-                
-                if (savedPrompts.length === 0) {
-                    container.innerHTML = '<p style="color: #666; font-style: italic;">Aucun prompt sauvegardé</p>';
-                    return;
-                }
-
-                container.innerHTML = savedPrompts.map(prompt => `
-                    <div class="saved-prompt-item">
-                        <div>
-                            <strong>${prompt.name}</strong>
-                            <small style="color: #666; display: block;">${prompt.createdAt}</small>
-                        </div>
-                        <div>
-                            <button class="btn btn-secondary" style="margin-right: 10px; padding: 5px 10px;" onclick="promptGenerator.loadPrompt(${prompt.id})">
-                                Charger
-                            </button>
-                            <button class="btn" style="background: #dc3545; color: white; padding: 5px 10px;" onclick="promptGenerator.deletePrompt(${prompt.id})">
-                                ×
-                            </button>
-                        </div>
-                    </div>
-                `).join('');
-            }
-
-            loadPrompt(id) {
-                const savedPrompts = JSON.parse(localStorage.getItem('savedPrompts') || '[]');
-                const prompt = savedPrompts.find(p => p.id === id);
-                
-                if (prompt) {
-                    // Ici, on pourrait parser le prompt pour remplir les champs
-                    // Pour simplifier, on affiche juste le prompt dans la preview
-                    this.preview.textContent = prompt.prompt;
-                    this.showToast('Prompt chargé!');
-                }
-            }
-
-            deletePrompt(id) {
-                if (confirm('Êtes-vous sûr de vouloir supprimer ce prompt ?')) {
-                    const savedPrompts = JSON.parse(localStorage.getItem('savedPrompts') || '[]');
-                    const filteredPrompts = savedPrompts.filter(p => p.id !== id);
-                    localStorage.setItem('savedPrompts', JSON.stringify(filteredPrompts));
-                    this.loadSavedPrompts();
-                    this.showToast('Prompt supprimé');
-                }
-            }
-
-            clearForm() {
-                if (confirm('Êtes-vous sûr de vouloir effacer tous les champs ?')) {
-                    this.form.reset();
-                    this.updatePreview();
-                    this.showToast('Formulaire effacé');
-                }
-            }
-
-            showToast(message, type = 'success') {
-                this.toastMessage.textContent = message;
-                this.toast.className = `toast ${type}`;
-                this.toast.classList.add('show');
-                
-                setTimeout(() => {
-                    this.toast.classList.remove('show');
-                }, 3000);
-            }
-        }
-
-        // Initialisation
-        const promptGenerator = new PromptGenerator();
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
