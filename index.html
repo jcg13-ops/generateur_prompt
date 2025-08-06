@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Prompt optimisé</title>
+  <title>PromptMaster</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -67,7 +67,8 @@
       font-size: 1em;
       font-weight: normal;
       font-family: 'Segoe UI', sans-serif;
-    }
+    resize: none;
+}
     .preview-section h3 {
       margin-top: 0;
       font-size: 1.1em;
@@ -118,7 +119,6 @@
       background-color: #e0e0e0;
     }
     .delete-btn {
-background-color: #d7c378;
       background: none;
       border: none;
       color: #e3051b;
@@ -127,8 +127,8 @@ background-color: #d7c378;
       margin-left: 10px;
     }
     .delete-btn:hover {
-      text-decoration: underline;
-    }
+  text-decoration: none;
+}
     .action-buttons {
       margin-top: 20px;
       display: flex;
@@ -150,7 +150,6 @@ background-color: #d7c378;
       background: #01a6aa;
     }
     .btn-clear {
-background: #d7c378;
       background: #e3051b;
     }
     .btn-save {
@@ -161,7 +160,7 @@ background: #d7c378;
 <body>
   <div class="container">
     <div class="header">
-      <h1>Prompt optimisé</h1>
+      <h1>PromptMaster</h1>
     </div>
     <div class="main-content">
       <div class="form-section">
@@ -172,15 +171,15 @@ background: #d7c378;
           </div>
           <div class="form-group">
             <label for="context">🌟 Contexte</label>
-            <textarea id="context" placeholder="Rédige un rapport sur les vulnérabilités d’un réseau d’entreprise." rows=\"6\"></textarea>
+            <textarea id="context" placeholder="Exemple : tu rédiges un rapport sur les vulnérabilités d’un réseau d’entreprise."></textarea>
           </div>
           <div class="form-group">
             <label for="task">📝 Tâche principale</label>
-            <textarea id="task" placeholder="Identifie les principales menaces et propose des solutions." rows=\"6\"></textarea>
+            <textarea id="task" placeholder="Exemple : tu identifies les principales menaces et proposes des solutions."></textarea>
           </div>
           <div class="form-group">
             <label for="constraints">⚠️ Contraintes et limitations</label>
-            <textarea id="constraints" placeholder="Utilise un langage compréhensible pour un public non technique." rows=\"6\"></textarea>
+            <textarea id="constraints" placeholder="Exemple : tu utilises un langage compréhensible pour un public non technique."></textarea>
           </div>
           <div class="form-group">
             <label for="tone">🎨 Ton et style</label>
@@ -272,7 +271,7 @@ background: #d7c378;
       const words = plainText.trim().split(/\s+/).filter(Boolean).length;
       const chars = plainText.length;
       const percent = Math.min(Math.round((chars / 4000) * 100), 100);
-      
+      stats.textContent = `📝 ${words} mots · ${chars} caractères · ${percent}% de la limite`;
     }
 
     function copyPrompt() {
