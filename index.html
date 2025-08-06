@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Générateur de prompts optimisé</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PromptMaster</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -35,7 +35,8 @@
       grid-template-columns: 1fr 1fr;
       min-height: 600px;
     }
-    .form-section, .preview-section {
+    .form-section,
+    .preview-section {
       padding: 30px;
     }
     .form-section {
@@ -76,8 +77,11 @@
       font-family: 'Segoe UI', sans-serif;
       min-height: 200px;
     }
-    .preview-box b {
-      text-transform: lowercase;
+    /* Styles pour titres en gras dans l'aperçu */
+    .preview-box .section-title {
+      font-weight: bold;
+      margin-top: 1em;
+      margin-bottom: 0.3em;
     }
     .metrics {
       margin-top: 10px;
@@ -119,40 +123,55 @@
       cursor: pointer;
       font-size: 1em;
       font-family: 'Segoe UI', sans-serif;
+      color: white;
     }
     .btn-primary {
       background: #01a6aa;
-      color: white;
     }
-    .btn-secondary {
-      background: #6c757d;
-      color: white;
+    .btn-clear {
+      background: #e3051b; /* rouge */
+    }
+    .btn-save {
+      background: #f6a318; /* orange */
     }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <h1>Générateur de prompts optimisé</h1>
+      <h1>PromptMaster</h1>
     </div>
     <div class="main-content">
       <div class="form-section">
         <form id="promptForm">
           <div class="form-group">
-            <label for="role">👤 Rôle</label>
-            <input type="text" id="role" placeholder="Par exemple : expert en cybersécurité">
+            <label for="role">👤 Rôle de l'IA</label>
+            <input
+              type="text"
+              id="role"
+              placeholder="Exemple : tu es expert en cybersécurité"
+            />
           </div>
           <div class="form-group">
             <label for="context">🌟 Contexte</label>
-            <textarea id="context" placeholder="Par exemple : tu rédiges un rapport sur les vulnérabilités d’un réseau d’entreprise."></textarea>
+            <textarea
+              id="context"
+              placeholder="Exemple : tu rédiges un rapport sur les vulnérabilités d’un réseau d’entreprise."
+            ></textarea>
           </div>
           <div class="form-group">
             <label for="task">📝 Tâche principale</label>
-            <textarea id="task" placeholder="Par exemple : identifier les principales menaces et proposer des solutions."></textarea>
+            <textarea
+              id="task"
+              placeholder="Exemple : tu identifies les principales menaces et proposes des solutions."
+            ></textarea>
           </div>
           <div class="form-group">
             <label for="constraints">⚠️ Contraintes et limitations</label>
-            <textarea id="constraints" placeholder="Par exemple : utiliser un langage compréhensible pour un public non technique."></textarea>
+            <textarea
+              id="constraints"
+              placeholder="Exemple : tu utilises un langage compréhensible pour un public non technique."
+            ></textarea>
           </div>
           <div class="form-group">
             <label for="tone">🎨 Ton et style</label>
@@ -184,8 +203,8 @@
         <div class="metrics" id="promptStats"></div>
         <div class="action-buttons">
           <button class="btn btn-primary" onclick="copyPrompt()">📋 Copier</button>
-          <button class="btn btn-secondary" onclick="clearForm()">🗑️ Effacer</button>
-          <button class="btn btn-secondary" onclick="savePrompt()">💾 Sauvegarder</button>
+          <button class="btn btn-clear" onclick="clearForm()">🗑️ Effacer</button>
+          <button class="btn btn-save" onclick="savePrompt()">💾 Sauvegarder</button>
         </div>
         <div class="saved-prompts" id="savedPromptsList"></div>
       </div>
@@ -193,47 +212,73 @@
   </div>
 
   <script>
+    function escapeHtml(text) {
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;',
+      };
+      return text.replace(/[&<>"']/g, function (m) {
+        return map[m];
+      });
+    }
+
     function generatePrompt() {
-      const role = document.getElementById('role').value;
-      const context = document.getElementById('context').value;
-      const task = document.getElementById('task').value;
-      const constraints = document.getElementById('constraints').value;
+      const role = document.getElementById('role').value.trim();
+      const context = document.getElementById('context').value.trim();
+      const task = document.getElementById('task').value.trim();
+      const constraints = document.getElementById('constraints').value.trim();
       const tone = document.getElementById('tone').value;
       const format = document.getElementById('format').value;
 
-      let prompt = '';
-      if (role) prompt += `Tu es ${role}.
+      let promptHTML = '';
 
-`;
-      if (context) prompt += `Contexte
-${context}
+      if (role)
+        promptHTML += `<div><strong>Tu es</strong> ${escapeHtml(role)}.</div><br/>`;
 
-`;
-      if (task) prompt += `Tâche principale
-${task}
+      if (context)
+        promptHTML +=
+          `<div class="section-title">Contexte</div><div>${escapeHtml(
+            context
+          )}</div><br/>`;
 
-`;
-      if (constraints) prompt += `Contraintes et limitations
-${constraints}
+      if (task)
+        promptHTML +=
+          `<div class="section-title">Tâche principale</div><div>${escapeHtml(
+            task
+          )}</div><br/>`;
 
-`;
+      if (constraints)
+        promptHTML +=
+          `<div class="section-title">Contraintes et limitations</div><div>${escapeHtml(
+            constraints
+          )}</div><br/>`;
+
       if (tone || format) {
-        prompt += `Instructions
-`;
-        if (tone) prompt += `- Adopter un ton ${tone}
-`;
-        if (format) prompt += `- Format souhaité : ${format}
-`;
+        promptHTML += `<div class="section-title">Instructions</div><div>`;
+        if (tone) promptHTML += `- Adopte un ton ${escapeHtml(tone)}<br/>`;
+        if (format)
+          promptHTML += `- Format souhaité : ${escapeHtml(format)}<br/>`;
+        promptHTML += `</div>`;
       }
 
       const preview = document.getElementById('promptPreview');
+      preview.innerHTML = promptHTML || 'Aperçu du prompt';
+
+      // stats en texte brut (sans balises)
+      const plainText = `${role ? `Tu es ${role}.\n\n` : ''}${
+        context ? `Contexte\n${context}\n\n` : ''
+      }${task ? `Tâche principale\n${task}\n\n` : ''}${
+        constraints ? `Contraintes et limitations\n${constraints}\n\n` : ''
+      }${tone || format ? `Instructions\n` : ''}${
+        tone ? `- Adopte un ton ${tone}\n` : ''
+      }${format ? `- Format souhaité : ${format}\n` : ''}`;
+
       const stats = document.getElementById('promptStats');
-
-      const finalText = prompt.trim();
-      preview.textContent = finalText || 'Aperçu du prompt';
-
-      const words = finalText.split(/\s+/).filter(Boolean).length;
-      const chars = finalText.length;
+      const words = plainText.trim().split(/\s+/).filter(Boolean).length;
+      const chars = plainText.length;
       const percent = Math.min(Math.round((chars / 4000) * 100), 100);
 
       stats.textContent = `📝 ${words} mots · ${chars} caractères · ${percent}% de la limite`;
@@ -252,14 +297,18 @@ ${constraints}
     }
 
     function savePrompt() {
-      const prompt = document.getElementById('promptPreview').textContent;
-      if (!prompt || prompt === 'Aperçu du prompt') {
+      const preview = document.getElementById('promptPreview');
+      if (!preview.textContent || preview.textContent === 'Aperçu du prompt') {
         alert('Aucun prompt à sauvegarder');
         return;
       }
       const prompts = JSON.parse(localStorage.getItem('savedPrompts') || '[]');
-      const title = prompt.split('\n')[0] || `Prompt ${prompts.length + 1}`;
-      prompts.push({ text: prompt, title: title, date: new Date().toLocaleString() });
+      const title = preview.textContent.split('\n')[0] || `Prompt ${prompts.length + 1}`;
+      prompts.push({
+        text: preview.textContent,
+        title: title,
+        date: new Date().toLocaleString(),
+      });
       localStorage.setItem('savedPrompts', JSON.stringify(prompts));
       renderSavedPrompts();
       alert('Prompt sauvegardé');
@@ -268,10 +317,18 @@ ${constraints}
     function renderSavedPrompts() {
       const list = document.getElementById('savedPromptsList');
       const prompts = JSON.parse(localStorage.getItem('savedPrompts') || '[]');
-      if (prompts.length === 0) return;
-      list.innerHTML = '<h4>Prompts sauvegardés</h4>' + prompts.map((p, i) =>
-        `<div class="saved-prompt-item" onclick="loadPrompt(${i})">${p.title}</div>`
-      ).join('');
+      if (prompts.length === 0) {
+        list.innerHTML = '';
+        return;
+      }
+      list.innerHTML =
+        '<h4>Prompts sauvegardés</h4>' +
+        prompts
+          .map(
+            (p, i) =>
+              `<div class="saved-prompt-item" onclick="loadPrompt(${i})">${p.title}</div>`
+          )
+          .join('');
     }
 
     function loadPrompt(index) {
