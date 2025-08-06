@@ -67,8 +67,7 @@
       font-size: 1em;
       font-weight: normal;
       font-family: 'Segoe UI', sans-serif;
-    resize: none;
-}
+    }
     .preview-section h3 {
       margin-top: 0;
       font-size: 1.1em;
@@ -127,8 +126,8 @@
       margin-left: 10px;
     }
     .delete-btn:hover {
-  text-decoration: none;
-}
+      text-decoration: underline;
+    }
     .action-buttons {
       margin-top: 20px;
       display: flex;
@@ -150,36 +149,36 @@
       background: #01a6aa;
     }
     .btn-clear {
-      background: #e3051b;
+      background: #d7c378;
     }
     .btn-save {
-      background: #f6a318;
+      background: #d7c378;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <h1>PromptMaster</h1>
+      <h1>Prompt optimisé</h1>
     </div>
     <div class="main-content">
       <div class="form-section">
         <form id="promptForm">
           <div class="form-group">
             <label for="role">👤 Rôle de l'IA</label>
-            <input type="text" id="role" placeholder="Exemple : tu es expert en cybersécurité" />
+            <input type="text" id="role" placeholder="Exemple : sois expert en cybersécurité" />
           </div>
           <div class="form-group">
             <label for="context">🌟 Contexte</label>
-            <textarea id="context" placeholder="Exemple : tu rédiges un rapport sur les vulnérabilités d’un réseau d’entreprise."></textarea>
+            <textarea id="context" placeholder="Exemple : rédige un rapport sur les vulnérabilités d’un réseau d’entreprise."></textarea>
           </div>
           <div class="form-group">
             <label for="task">📝 Tâche principale</label>
-            <textarea id="task" placeholder="Exemple : tu identifies les principales menaces et proposes des solutions."></textarea>
+            <textarea id="task" placeholder="Exemple : identifie les principales menaces et propose des solutions."></textarea>
           </div>
           <div class="form-group">
             <label for="constraints">⚠️ Contraintes et limitations</label>
-            <textarea id="constraints" placeholder="Exemple : tu utilises un langage compréhensible pour un public non technique."></textarea>
+            <textarea id="constraints" placeholder="Exemple : utilise un langage compréhensible pour un public non technique."></textarea>
           </div>
           <div class="form-group">
             <label for="tone">🎨 Ton et style</label>
