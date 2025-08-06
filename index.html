@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Prompt optimisé</title>
+  <title>PromptMaster</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -33,7 +33,7 @@
     .main-content {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      min-height: 700px;
+      min-height: 600px;
     }
     .form-section,
     .preview-section {
@@ -55,6 +55,7 @@
       font-weight: bold;
       display: block;
       margin-bottom: 6px;
+      font-size: 1.1em;
     }
     .form-group input,
     .form-group textarea,
@@ -66,15 +67,10 @@
       font-size: 1em;
       font-weight: normal;
       font-family: 'Segoe UI', sans-serif;
-      resize: vertical;
-      box-sizing: border-box;
     }
-    textarea {
-      resize: vertical;
-    }
-    .form-group textarea {
-      rows: 6;
-      min-height: 120px;
+    .preview-section h3 {
+      margin-top: 0;
+      font-size: 1.1em;
     }
     .preview-box {
       background: #f5f5f5;
@@ -86,10 +82,18 @@
       font-family: 'Segoe UI', sans-serif;
       min-height: 200px;
     }
+    .preview-box div {
+      margin-bottom: 10px;
+    }
     .preview-box .section-title {
       font-weight: bold;
-      margin-top: 1em;
-      margin-bottom: 0.3em;
+      margin-bottom: 5px;
+    }
+    .metrics {
+      margin-top: 10px;
+      font-size: 0.9em;
+      color: #666;
+      font-family: 'Segoe UI', sans-serif;
     }
     .saved-prompts {
       margin-top: 20px;
@@ -116,15 +120,13 @@
     .delete-btn {
       background: none;
       border: none;
-      color: #d9534f;
-      font-weight: bold;
-      font-size: 1.2em;
+      color: #e3051b;
+      font-size: 1em;
       cursor: pointer;
-      text-decoration: none;
+      margin-left: 10px;
     }
     .delete-btn:hover {
-      text-decoration: none;
-      color: #a94442;
+      text-decoration: underline;
     }
     .action-buttons {
       margin-top: 20px;
@@ -146,168 +148,37 @@
     .btn-primary {
       background: #01a6aa;
     }
-    .btn-clear,
-    .delete-btn {
-      background: #d7c378;
-      color: black;
+    .btn-clear {
+      background: #e3051b;
     }
     .btn-save {
       background: #f6a318;
     }
   </style>
 </head>
-  <script>
-  function escapeHtml(text) {
-    const map = {
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#039;',
-    };
-    return text.replace(/[&<>"']/g, (m) => map[m]);
-  }
-
-  function generatePrompt() {
-    const role = document.getElementById('role').value.trim();
-    const context = document.getElementById('context').value.trim();
-    const task = document.getElementById('task').value.trim();
-    const constraints = document.getElementById('constraints').value.trim();
-    const tone = document.getElementById('tone').value;
-    const format = document.getElementById('format').value;
-
-    let promptHTML = '';
-
-    if (role)
-      promptHTML += `<div><strong>Tu es</strong> ${escapeHtml(role)}.</div><br/>`;
-
-    if (context)
-      promptHTML += `<div class="section-title">Contexte</div><div>${escapeHtml(context)}</div><br/>`;
-
-    if (task)
-      promptHTML += `<div class="section-title">Tâche principale</div><div>${escapeHtml(task)}</div><br/>`;
-
-    if (constraints)
-      promptHTML += `<div class="section-title">Contraintes et limitations</div><div>${escapeHtml(constraints)}</div><br/>`;
-
-    if (tone || format) {
-      promptHTML += `<div class="section-title">Instructions</div><div>`;
-      if (tone) promptHTML += `- Adopte un ton ${escapeHtml(tone)}<br/>`;
-      if (format) promptHTML += `- Format souhaité : ${escapeHtml(format)}<br/>`;
-      promptHTML += `</div>`;
-    }
-
-    const preview = document.getElementById('promptPreview');
-    preview.innerHTML = promptHTML || 'Aperçu du prompt';
-
-    const plainText = `${role ? `Tu es ${role}.\n\n` : ''}${context ? `Contexte\n${context}\n\n` : ''}${task ? `Tâche principale\n${task}\n\n` : ''}${constraints ? `Contraintes et limitations\n${constraints}\n\n` : ''}${tone || format ? `Instructions\n` : ''}${tone ? `- Adopte un ton ${tone}\n` : ''}${format ? `- Format souhaité : ${format}\n` : ''}`;
-  }
-
-  function copyPrompt() {
-    const text = document.getElementById('promptPreview').textContent;
-    navigator.clipboard.writeText(text).then(() => alert('Prompt copié !'));
-  }
-
-  function clearForm() {
-    if (confirm('Effacer tous les champs ?')) {
-      document.getElementById('promptForm').reset();
-      generatePrompt();
-    }
-  }
-
-  function savePrompt() {
-    const preview = document.getElementById('promptPreview');
-    if (!preview.textContent || preview.textContent === 'Aperçu du prompt') {
-      alert('Aucun prompt à sauvegarder');
-      return;
-    }
-    const prompts = JSON.parse(localStorage.getItem('savedPrompts') || '[]');
-    const title = preview.textContent.split('\n')[0] || `Prompt ${prompts.length + 1}`;
-    prompts.push({
-      text: preview.textContent,
-      title: title,
-      date: new Date().toLocaleString(),
-    });
-    localStorage.setItem('savedPrompts', JSON.stringify(prompts));
-    renderSavedPrompts();
-    alert('Prompt sauvegardé');
-  }
-
-  function renderSavedPrompts() {
-    const list = document.getElementById('savedPromptsList');
-    const prompts = JSON.parse(localStorage.getItem('savedPrompts') || '[]');
-    if (prompts.length === 0) {
-      list.innerHTML = '';
-      return;
-    }
-    list.innerHTML = '<h4>Prompts sauvegardés</h4>' + prompts
-      .map((p, i) =>
-        `<div class="saved-prompt-item">
-          <span onclick="loadPrompt(${i})">${p.title}</span>
-          <span class="delete-btn" onclick="deletePrompt(event, ${i})" title="Supprimer">🗑️</span>
-        </div>`
-      ).join('');
-  }
-
-  function loadPrompt(index) {
-    const prompts = JSON.parse(localStorage.getItem('savedPrompts') || '[]');
-    if (prompts[index]) {
-      document.getElementById('promptPreview').textContent = prompts[index].text;
-    }
-  }
-
-  function deletePrompt(event, index) {
-    event.stopPropagation();
-    if (confirm('Supprimer ce prompt ?')) {
-      const prompts = JSON.parse(localStorage.getItem('savedPrompts') || '[]');
-      prompts.splice(index, 1);
-      localStorage.setItem('savedPrompts', JSON.stringify(prompts));
-      renderSavedPrompts();
-    }
-  }
-
-  document.getElementById('promptForm').addEventListener('input', generatePrompt);
-  window.addEventListener('load', () => {
-    generatePrompt();
-    renderSavedPrompts();
-  });
-</script>
 <body>
   <div class="container">
     <div class="header">
-      <h1>Prompt optimisé</h1>
+      <h1>PromptMaster</h1>
     </div>
     <div class="main-content">
       <div class="form-section">
         <form id="promptForm">
           <div class="form-group">
             <label for="role">👤 Rôle de l'IA</label>
-            <input
-              type="text"
-              id="role"
-              placeholder="Exemple : Sois expert en cybersécurité"
-            />
+            <input type="text" id="role" placeholder="Exemple : tu es expert en cybersécurité" />
           </div>
           <div class="form-group">
             <label for="context">🌟 Contexte</label>
-            <textarea
-              id="context"
-              placeholder="Exemple : Rédige un rapport sur les vulnérabilités d’un réseau d’entreprise."
-            ></textarea>
+            <textarea id="context" placeholder="Exemple : tu rédiges un rapport sur les vulnérabilités d’un réseau d’entreprise."></textarea>
           </div>
           <div class="form-group">
             <label for="task">📝 Tâche principale</label>
-            <textarea
-              id="task"
-              placeholder="Exemple : Identifie les principales menaces et propose des solutions."
-            ></textarea>
+            <textarea id="task" placeholder="Exemple : tu identifies les principales menaces et proposes des solutions."></textarea>
           </div>
           <div class="form-group">
             <label for="constraints">⚠️ Contraintes et limitations</label>
-            <textarea
-              id="constraints"
-              placeholder="Exemple : Utilise un langage compréhensible pour un public non technique."
-            ></textarea>
+            <textarea id="constraints" placeholder="Exemple : tu utilises un langage compréhensible pour un public non technique."></textarea>
           </div>
           <div class="form-group">
             <label for="tone">🎨 Ton et style</label>
@@ -334,8 +205,9 @@
         </form>
       </div>
       <div class="preview-section">
-        <h3>🕁️ Aperçu du Prompt</h3>
+        <h3>👁️ Aperçu du Prompt</h3>
         <div class="preview-box" id="promptPreview">Aperçu du prompt</div>
+        <div class="metrics" id="promptStats"></div>
         <div class="action-buttons">
           <button class="btn btn-primary" onclick="copyPrompt()">📋 Copier</button>
           <button class="btn btn-clear" onclick="clearForm()">🗑️ Effacer</button>
@@ -345,3 +217,145 @@
       </div>
     </div>
   </div>
+
+  <script>
+    function escapeHtml(text) {
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;',
+      };
+      return text.replace(/[&<>"']/g, function (m) {
+        return map[m];
+      });
+    }
+
+    function generatePrompt() {
+      const role = document.getElementById('role').value.trim();
+      const context = document.getElementById('context').value.trim();
+      const task = document.getElementById('task').value.trim();
+      const constraints = document.getElementById('constraints').value.trim();
+      const tone = document.getElementById('tone').value;
+      const format = document.getElementById('format').value;
+
+      let promptHTML = '';
+
+      if (role)
+        promptHTML += `<div><strong>Tu es</strong> ${escapeHtml(role)}.</div>`;
+
+      if (context)
+        promptHTML += `<div><div class="section-title">Contexte</div>${escapeHtml(context)}</div>`;
+
+      if (task)
+        promptHTML += `<div><div class="section-title">Tâche principale</div>${escapeHtml(task)}</div>`;
+
+      if (constraints)
+        promptHTML += `<div><div class="section-title">Contraintes et limitations</div>${escapeHtml(constraints)}</div>`;
+
+      if (tone || format) {
+        promptHTML += `<div><div class="section-title">Instructions</div>`;
+        if (tone) promptHTML += `- Adopte un ton ${escapeHtml(tone)}<br/>`;
+        if (format) promptHTML += `- Format souhaité : ${escapeHtml(format)}<br/>`;
+        promptHTML += `</div>`;
+      }
+
+      const preview = document.getElementById('promptPreview');
+      preview.innerHTML = promptHTML || 'Aperçu du prompt';
+
+      const plainText = `${role ? `Tu es ${role}.\n\n` : ''}${context ? `Contexte\n${context}\n\n` : ''}${task ? `Tâche principale\n${task}\n\n` : ''}${constraints ? `Contraintes et limitations\n${constraints}\n\n` : ''}${tone || format ? `Instructions\n` : ''}${tone ? `- Adopte un ton ${tone}\n` : ''}${format ? `- Format souhaité : ${format}\n` : ''}`;
+
+      const stats = document.getElementById('promptStats');
+      const words = plainText.trim().split(/\s+/).filter(Boolean).length;
+      const chars = plainText.length;
+      const percent = Math.min(Math.round((chars / 4000) * 100), 100);
+      stats.textContent = `📝 ${words} mots · ${chars} caractères · ${percent}% de la limite`;
+    }
+
+    function copyPrompt() {
+      const text = document.getElementById('promptPreview').textContent;
+      navigator.clipboard.writeText(text).then(() => alert('Prompt copié !'));
+    }
+
+    function clearForm() {
+      if (confirm('Effacer tous les champs ?')) {
+        document.getElementById('promptForm').reset();
+        generatePrompt();
+      }
+    }
+
+    function savePrompt() {
+      const preview = document.getElementById('promptPreview');
+      if (!preview.textContent || preview.textContent === 'Aperçu du prompt') {
+        alert('Aucun prompt à sauvegarder');
+        return;
+      }
+      const prompts = JSON.parse(localStorage.getItem('savedPrompts') || '[]');
+      const title = `Prompt ${prompts.length + 1}`;
+      prompts.push({
+        text: preview.textContent,
+        title: title,
+        date: new Date().toLocaleString(),
+      });
+      localStorage.setItem('savedPrompts', JSON.stringify(prompts));
+      renderSavedPrompts();
+      alert('Prompt sauvegardé');
+    }
+
+    function renderSavedPrompts() {
+      const list = document.getElementById('savedPromptsList');
+      const prompts = JSON.parse(localStorage.getItem('savedPrompts') || '[]');
+      if (prompts.length === 0) {
+        list.innerHTML = '';
+        return;
+      }
+      list.innerHTML = '<h4>Prompts sauvegardés</h4>';
+      prompts.forEach((p, i) => {
+        const item = document.createElement('div');
+        item.className = 'saved-prompt-item';
+
+        const titleSpan = document.createElement('span');
+        titleSpan.textContent = p.title;
+        titleSpan.style.flexGrow = '1';
+        titleSpan.style.cursor = 'pointer';
+        titleSpan.onclick = () => loadPrompt(i);
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.textContent = '🗑️';
+        deleteBtn.onclick = (e) => {
+          e.stopPropagation();
+          deletePrompt(i);
+        };
+
+        item.appendChild(titleSpan);
+        item.appendChild(deleteBtn);
+        list.appendChild(item);
+      });
+    }
+
+    function deletePrompt(index) {
+      if (!confirm("Supprimer ce prompt ?")) return;
+      const prompts = JSON.parse(localStorage.getItem('savedPrompts') || '[]');
+      prompts.splice(index, 1);
+      localStorage.setItem('savedPrompts', JSON.stringify(prompts));
+      renderSavedPrompts();
+    }
+
+    function loadPrompt(index) {
+      const prompts = JSON.parse(localStorage.getItem('savedPrompts') || '[]');
+      if (prompts[index]) {
+        document.getElementById('promptPreview').textContent = prompts[index].text;
+        document.getElementById('promptStats').textContent = '';
+      }
+    }
+
+    document.getElementById('promptForm').addEventListener('input', generatePrompt);
+    window.addEventListener('load', () => {
+      generatePrompt();
+      renderSavedPrompts();
+    });
+  </script>
+</body>
+</html>
