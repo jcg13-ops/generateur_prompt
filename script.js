@@ -175,7 +175,7 @@ class PromptGenerator {
         localStorage.setItem('savedPrompts', JSON.stringify(savedPrompts));
         
         this.loadSavedPrompts();
-        this.showToast('Prompt sauvegardé avec succès!');
+        this.showToast('Prompt sauvegardé !');
     }
 
     loadSavedPrompts() {
