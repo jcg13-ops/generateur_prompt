@@ -54,6 +54,8 @@ class PromptGenerator {
         const formData = this.getFormData();
         const prompt = this.generatePrompt(formData);
     
+        this.rawPrompt = prompt; // ✅ on garde la version brute ici
+    
         this.preview.innerHTML = this.formatPrompt(prompt) || 'Aperçu de votre prompt...';
     
         // Mise à jour des statistiques
@@ -140,10 +142,10 @@ class PromptGenerator {
     }
 
     copyPrompt() {
-        const prompt = this.preview.textContent;
-        if (prompt && prompt !== 'Remplissez les champs pour voir l\'aperçu du prompt généré...') {
+        const prompt = this.rawPrompt;
+        if (prompt && prompt.trim() !== '') {
             navigator.clipboard.writeText(prompt).then(() => {
-                this.showToast('Prompt copié dans le presse-papier!');
+                this.showToast('Prompt copié !');
             }).catch(() => {
                 this.showToast('Erreur lors de la copie', 'error');
             });
