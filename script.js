@@ -102,7 +102,7 @@ class PromptGenerator {
                 prompt += `- Adopte un ton ${data.tone}\n`;
             }
             if (data.format) {
-                prompt += `- Présente la réponse sous forme de ${data.format}\n`;
+                prompt += `- Présente la réponse sous forme ${data.format}\n`;
             }
             prompt += '\n';
         }
