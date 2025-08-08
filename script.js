@@ -53,14 +53,14 @@ class PromptGenerator {
     updatePreview() {
         const formData = this.getFormData();
         const prompt = this.generatePrompt(formData);
-        
-        this.preview.textContent = prompt || 'Remplissez les champs pour voir l\'aperçu du prompt généré...';
-        
+    
+        this.preview.innerHTML = this.formatPrompt(prompt) || 'Remplissez les champs pour voir l\'aperçu du prompt généré...';
+    
         // Mise à jour des statistiques
         const charCount = prompt.length;
         const wordCount = prompt.split(/\s+/).filter(word => word.length > 0).length;
         const qualityScore = this.calculateQualityScore(formData);
-        
+    
         this.charCount.textContent = charCount;
         this.wordCount.textContent = wordCount;
         this.qualityScore.textContent = qualityScore + '%';
@@ -108,6 +108,19 @@ class PromptGenerator {
         }
         
         return prompt.trim();
+    }
+    
+    formatPrompt(prompt) {
+    if (!prompt) return '';
+
+    return prompt
+        .replace(/^Tu es/gm, '<strong>Tu es</strong>')
+        .replace(/^Contexte:/gm, '<strong>Contexte:</strong>')
+        .replace(/^Tâche à réaliser:/gm, '<strong>Tâche à réaliser:</strong>')
+        .replace(/^Contraintes:/gm, '<strong>Contraintes:</strong>')
+        .replace(/^Instructions:/gm, '<strong>Instructions:</strong>')
+        .replace(/^-\s/gm, '&nbsp;&nbsp;- ')
+        .replace(/\n/g, '<br>');
     }
 
     calculateQualityScore(data) {
