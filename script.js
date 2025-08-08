@@ -85,19 +85,19 @@ class PromptGenerator {
         }
         
         if (data.context) {
-            prompt += `contexte:\n${data.context}\n\n`;
+            prompt += `Contexte:\n${data.context}\n\n`;
         }
         
         if (data.task) {
-            prompt += `tâche:\n${data.task}\n\n`;
+            prompt += `Tâche à réaliser:\n${data.task}\n\n`;
         }
         
         if (data.constraints) {
-            prompt += `contraintes:\n${data.constraints}\n\n`;
+            prompt += `Contraintes:\n${data.constraints}\n\n`;
         }
         
         if (data.tone || data.format) {
-            prompt += `instructions:\n`;
+            prompt += `Instructions:\n`;
             if (data.tone) {
                 prompt += `- Adopte un ton ${data.tone}\n`;
             }
