@@ -54,7 +54,7 @@ class PromptGenerator {
         const formData = this.getFormData();
         const prompt = this.generatePrompt(formData);
     
-        this.preview.innerHTML = this.formatPrompt(prompt) || 'Remplissez les champs pour voir l\'aperçu du prompt généré...';
+        this.preview.innerHTML = this.formatPrompt(prompt) || 'Aperçu de votre prompt...';
     
         // Mise à jour des statistiques
         const charCount = prompt.length;
